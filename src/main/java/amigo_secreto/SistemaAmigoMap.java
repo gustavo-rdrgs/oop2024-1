@@ -36,11 +36,13 @@ public class SistemaAmigoMap {
 
     public void enviarMensagemParaTodos(String texto, String emailRemetente, boolean ehAnonima){
         MensagemParaTodos m = new MensagemParaTodos(texto, emailRemetente, ehAnonima);
+        mensagens.add(m);
         System.out.println(m.getTextoCompletoAExibir());
     }
 
     public void enviarMensagemParaAlguem(String texto, String emailRemetente, String emailDestinatario, boolean ehAnonima){
         MensagemParaAlguem m = new MensagemParaAlguem(texto, emailRemetente, emailDestinatario, ehAnonima);
+        mensagens.add(m);
         System.out.println(m.getTextoCompletoAExibir());
     }
 
@@ -66,10 +68,12 @@ public class SistemaAmigoMap {
 
     }
 
-    public String pesquisaAmigoSecretoDe(String emailDaPessoa) throws AmigoInexistenteException{
+    public String pesquisaAmigoSecretoDe(String emailDaPessoa) throws AmigoInexistenteException, AmigoNaoSorteadoException{
         Amigo amigoSelecionado = pesquisaAmigo(emailDaPessoa);
         String emailAmigoSecreto = amigoSelecionado.getEmailAmigoSorteado();
-        pesquisaAmigo(emailAmigoSecreto);
+        if (emailAmigoSecreto == null){
+            throw new AmigoNaoSorteadoException("Nenhum amigo foi sorteado para '"+emailDaPessoa+"'");
+        }
         return emailAmigoSecreto;
     }
 
