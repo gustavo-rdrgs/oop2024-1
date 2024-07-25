@@ -14,8 +14,6 @@ public class SistemaAmigoMap {
         this.mensagens = new ArrayList<>();
     }
 
-
-
     public void cadastraAmigo(String nomeAmigo, String emailAmigo) throws AmigoJaExisteException{
         Amigo novoAmigo = new Amigo(nomeAmigo, emailAmigo);
         if (!amigos.containsValue(novoAmigo)){
@@ -76,8 +74,5 @@ public class SistemaAmigoMap {
         }
         return emailAmigoSecreto;
     }
-
-
-
 
 }
