@@ -14,11 +14,67 @@ public class SistemaAmigoMap {
         this.mensagens = new ArrayList<>();
     }
 
+
+    // TODO: Importar as Exceptions
+
+
     public void cadastraAmigo(String nomeAmigo, String emailAmigo){
-        //TODO:
+        Amigo novoAmigo = new Amigo(nomeAmigo, emailAmigo);
+        amigos.putIfAbsent(nomeAmigo, novoAmigo);
     }
 
-    //TODO: fazer os métodos restantes...
+    public Amigo pesquisaAmigo(String emailAmigo){
+        for (Amigo a: amigos.values()){
+            if (a.getEmail().equalsIgnoreCase(emailAmigo)){
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public void enviarMensagemParaTodos(String texto, String emailRemetente, boolean ehAnonima){
+        MensagemParaTodos m = new MensagemParaTodos(texto, emailRemetente, ehAnonima);
+        System.out.println(m.getTextoCompletoAExibir());
+    }
+
+    public void enviarMensagemParaAlguem(String texto, String emailRemetente, String emailDestinatario, boolean ehAnonima){
+        MensagemParaAlguem m = new MensagemParaAlguem(texto, emailRemetente, emailDestinatario, ehAnonima);
+        System.out.println(m.getTextoCompletoAExibir());
+    }
+
+    public List<Mensagem> pesquisaMensagensAnonimas(){
+        List<Mensagem> mensagensAnonimas = new ArrayList<>();
+        for (Mensagem m: mensagens){
+            if (m.ehAnonima()){
+                mensagensAnonimas.add(m);
+            }
+        }
+        return mensagensAnonimas;
+    }
+
+    public List<Mensagem> pesquisaTodasAsMensagens(){
+        return this.mensagens;
+    }
+
+    public void configuraAmigoSecretoDe(String emailDaPessoa, String emailAmigoSorteado){
+        Amigo amigoSelecionado = pesquisaAmigo(emailDaPessoa);
+        Amigo amigoSorteado = pesquisaAmigo(emailAmigoSorteado);
+        if (amigoSelecionado != null && amigoSorteado != null){
+            amigoSelecionado.setEmailAmigoSorteado(emailAmigoSorteado);
+            System.out.println("Amigo configurado com sucesso.");
+        }
+
+    }
+
+    public String pesquisaAmigoSecretoDe(String emailDaPessoa){
+        Amigo amigoSelecionado = pesquisaAmigo(emailDaPessoa);
+        String emailAmigoSecreto = amigoSelecionado.getEmailAmigoSorteado();
+
+
+        return emailAmigoSecreto;
+    }
+
+
 
 
 }

@@ -58,10 +58,13 @@ public class SistemaAmigo {
 
     public void configuraAmigoSecretoDe(String emailDaPessoa, String emailAmigoSorteado) throws AmigoInexistenteException{
         Amigo amigoSelecionado = pesquisaAmigo(emailDaPessoa);
-        if (amigoSelecionado == null){
+        Amigo amigoSorteado = pesquisaAmigo(emailAmigoSorteado);
+        if (amigoSelecionado != null && amigoSorteado != null){
+            amigoSelecionado.setEmailAmigoSorteado(emailAmigoSorteado);
+        } else {
             throw new AmigoInexistenteException("Amigo não encontrado");
         }
-        amigoSelecionado.setEmailAmigoSorteado(emailAmigoSorteado);
+
     }
 
     public String pesquisaAmigoSecretoDe(String emailDaPessoa) throws AmigoInexistenteException, AmigoNaoSorteadoException {
