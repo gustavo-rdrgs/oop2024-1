@@ -15,21 +15,23 @@ public class SistemaAmigoMap {
     }
 
 
-    // TODO: Importar as Exceptions
 
-
-    public void cadastraAmigo(String nomeAmigo, String emailAmigo){
+    public void cadastraAmigo(String nomeAmigo, String emailAmigo) throws AmigoJaExisteException{
         Amigo novoAmigo = new Amigo(nomeAmigo, emailAmigo);
-        amigos.putIfAbsent(nomeAmigo, novoAmigo);
+        if (!amigos.containsValue(novoAmigo)){
+            amigos.put(nomeAmigo, novoAmigo);
+        } else {
+            throw new AmigoJaExisteException("Amigo '"+nomeAmigo+"' já está cadastrado.");
+        }
     }
 
-    public Amigo pesquisaAmigo(String emailAmigo){
+    public Amigo pesquisaAmigo(String emailAmigo) throws AmigoInexistenteException{
         for (Amigo a: amigos.values()){
             if (a.getEmail().equalsIgnoreCase(emailAmigo)){
                 return a;
             }
         }
-        return null;
+        throw new AmigoInexistenteException("Amigo não encontrado");
     }
 
     public void enviarMensagemParaTodos(String texto, String emailRemetente, boolean ehAnonima){
@@ -56,21 +58,18 @@ public class SistemaAmigoMap {
         return this.mensagens;
     }
 
-    public void configuraAmigoSecretoDe(String emailDaPessoa, String emailAmigoSorteado){
+    public void configuraAmigoSecretoDe(String emailDaPessoa, String emailAmigoSorteado) throws AmigoInexistenteException{
         Amigo amigoSelecionado = pesquisaAmigo(emailDaPessoa);
         Amigo amigoSorteado = pesquisaAmigo(emailAmigoSorteado);
-        if (amigoSelecionado != null && amigoSorteado != null){
-            amigoSelecionado.setEmailAmigoSorteado(emailAmigoSorteado);
-            System.out.println("Amigo configurado com sucesso.");
-        }
+        amigoSelecionado.setEmailAmigoSorteado(emailAmigoSorteado);
+        System.out.println("Amigo configurado com sucesso.");
 
     }
 
-    public String pesquisaAmigoSecretoDe(String emailDaPessoa){
+    public String pesquisaAmigoSecretoDe(String emailDaPessoa) throws AmigoInexistenteException{
         Amigo amigoSelecionado = pesquisaAmigo(emailDaPessoa);
         String emailAmigoSecreto = amigoSelecionado.getEmailAmigoSorteado();
-
-
+        pesquisaAmigo(emailAmigoSecreto);
         return emailAmigoSecreto;
     }
 
