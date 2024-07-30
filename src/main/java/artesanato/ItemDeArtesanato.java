@@ -7,14 +7,18 @@ public class ItemDeArtesanato  implements Comparable<ItemDeArtesanato> {
     private String nome;
     private double preco;
 
-    public ItemDeArtesanato(String codigo, String nome, double preco) {
+    private TipoItem tipo;
+
+    public ItemDeArtesanato(String codigo, String nome, double preco, TipoItem tipo) {
         this.codigo = codigo;
         this.nome = nome;
         this.preco = preco;
+        this.tipo = tipo;
     }
 
+
     public ItemDeArtesanato() {
-        this("","",0.0);
+        this("","",0.0, TipoItem.INDEFINIDO);
     }
 
     public String getCodigo() {
@@ -58,13 +62,14 @@ public class ItemDeArtesanato  implements Comparable<ItemDeArtesanato> {
 
     @Override
     public int compareTo(ItemDeArtesanato o) {
-        //return this.nome.compareTo(o.getNome());
-        if (this.preco < o.getPreco()){
-            return -1;
-        } else if (this.preco== o.getPreco()){
-            return 0;
-        } else {
-            return 1;
-        }
+        return (int) (this.preco - o.getPreco());
+    }
+
+    @Override
+    public String toString() {
+        return "ItemDeArtesanato de " +
+                "codigo '" + codigo + '\'' +
+                ", nome '" + nome + '\'' +
+                ", e preco " + preco;
     }
 }

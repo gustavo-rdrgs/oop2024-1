@@ -3,23 +3,31 @@ package artesanato;
 import java.util.*;
 
 public class SistemaFeiraArtesanatoRioTinto implements SistemaFeiraArtesanato{
+
     private Map<String, ItemDeArtesanato> itensDeArtesanato;
 
+    public static final String PREFIXO_CODIGO= "COD";
+
     public SistemaFeiraArtesanatoRioTinto(){
-        itensDeArtesanato = new HashMap<>();
+        this.itensDeArtesanato = new HashMap<>();
     }
 
     @Override
-    public boolean cadastrarItem(ItemDeArtesanato item) {
-        if (itensDeArtesanato.containsKey(item.getCodigo())){
-            return false;
+    public void cadastraItem(ItemDeArtesanato item) throws CodigoInvalidoException, ItemJaExisteException {
+        if (this.itensDeArtesanato.containsKey(item.getCodigo())){
+            throw new ItemJaExisteException("Já existe item com o código "+item.getCodigo());
+        } else {
+            if (item.getCodigo().startsWith(PREFIXO_CODIGO)){
+                this.itensDeArtesanato.put(item.getCodigo(), item);
+            } else {
+                throw new CodigoInvalidoException("Código não começa com o prefixo "+PREFIXO_CODIGO);
+            }
+
         }
-        this.itensDeArtesanato.put(item.getCodigo(), item);
-        return true;
     }
 
     @Override
-    public List<ItemDeArtesanato> pesquisarItensPeloNome(String nome) {
+    public List<ItemDeArtesanato> pesquisaItensPeloNome(String nome) {
         List<ItemDeArtesanato> itensPeloNome = new LinkedList<>();
         for (ItemDeArtesanato item: this.itensDeArtesanato.values()){
             if (item.getNome().startsWith(nome)){
@@ -31,24 +39,25 @@ public class SistemaFeiraArtesanatoRioTinto implements SistemaFeiraArtesanato{
     }
 
     @Override
-    public List<ItemDeArtesanato> pesquisarItensAbaixoDoPreco(double preco) {
-        List<ItemDeArtesanato> itensAbaixoDoPreco = new LinkedList<>();
+    public List<ItemDeArtesanato> pesquisaItensAbaixoDoPreco(double preco) {
+        List<ItemDeArtesanato> itensPorPreco = new LinkedList<>();
         for (ItemDeArtesanato item: this.itensDeArtesanato.values()){
-            if (item.getPreco() <= preco){
-                itensAbaixoDoPreco.add(item);
+            if (item.getPreco()<= preco){
+                itensPorPreco.add(item);
             }
         }
-        Collections.sort(itensAbaixoDoPreco);
-        return itensAbaixoDoPreco;
+        Collections.sort(itensPorPreco);
+        return itensPorPreco;
     }
 
     @Override
-    public ItemDeArtesanato pesquisarItemPeloCodigo(String codigo) throws ItemInexistenteException{
+    public ItemDeArtesanato pesquisaItemPeloCodigo(String codigo) throws ItemInexistenteException {
         ItemDeArtesanato item = this.itensDeArtesanato.get(codigo);
-        if (item==null){
-            throw new ItemInexistenteException("Item com o código '"+codigo+"' não foi encontrado.");
+        if (item == null){
+            throw new ItemInexistenteException("Não existe item com o código "+codigo);
         } else {
             return item;
         }
+
     }
 }
