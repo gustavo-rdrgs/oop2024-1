@@ -49,10 +49,8 @@ public class SistemaComercialMap implements SistemaComercial {
 
     @Override
     public Cliente pesquisaCliente(String id) throws ClienteNaoExisteException {
-        for (Cliente c: clientes.values()){
-            if (c.getId().equals(id)){
-                return c;
-            }
+        if (clientes.containsKey(id)){
+            return clientes.get(id);
         }
         throw new ClienteNaoExisteException("Cliente com o ID '"+id+"' não foi encontrado.");
     }
