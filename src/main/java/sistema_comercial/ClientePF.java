@@ -8,6 +8,7 @@ public class ClientePF extends Cliente{
         this.CPF = CPF;
     }
 
+    @Override
     public String getId(){
         return this.CPF;
     }

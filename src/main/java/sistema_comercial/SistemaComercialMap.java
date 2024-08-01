@@ -1,5 +1,6 @@
 package sistema_comercial;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,14 +24,11 @@ public class SistemaComercialMap implements SistemaComercial {
     }
 
     @Override
-    public Produto pesquisaProduto(String codigoProduto)
-            throws ProdutoNaoExisteException {
+    public Produto pesquisaProduto(String codigoProduto) throws ProdutoNaoExisteException {
         if (this.produtos.containsKey(codigoProduto)) {
             return this.produtos.get(codigoProduto);
         }
-        throw new ProdutoNaoExisteException("Não foi encontrado produto"
-
-                + " com o código " + codigoProduto);
+        throw new ProdutoNaoExisteException("Não foi encontrado produto com o código " + codigoProduto);
 
     }
 
@@ -46,16 +44,27 @@ public class SistemaComercialMap implements SistemaComercial {
 
     @Override
     public boolean existeCliente(Cliente cliente) {
-        return false;
+        return (clientes.containsValue(cliente));
     }
 
     @Override
     public Cliente pesquisaCliente(String id) throws ClienteNaoExisteException {
-        return null;
+        for (Cliente c: clientes.values()){
+            if (c.getId().equals(id)){
+                return c;
+            }
+        }
+        throw new ClienteNaoExisteException("Cliente com o ID '"+id+"' não foi encontrado.");
     }
 
     @Override
     public Collection<Produto> pesquisaProdutosDaCategoria(CategoriaProduto categoria) {
-        return null;
+        Collection<Produto> produtosDaCategoria = new ArrayList<>();
+        for (Produto p: produtos.values()){
+            if (p.getCategoria().equals(categoria)){
+                produtosDaCategoria.add(p);
+            }
+        }
+        return produtosDaCategoria;
     }
 }
